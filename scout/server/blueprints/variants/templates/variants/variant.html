@@ -450,6 +450,20 @@
         </tr>
       </tbody>
     </table>
+    <div class="panel-heading">Variant litterature</div>
+    <table class="table table-bordered table-fixed">
+      <tbody>
+        <tr>
+          <td>
+            {% if variant.pubmed_link %}
+              <a href="{{ variant.pubmed_link }}" class="btn btn-default" target="_blank">Pubmed</a>
+            {% else %}
+              <span class="text-muted">None</span>
+            {% endif %}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 {% endmacro %}
 
@@ -960,6 +974,7 @@
           <th>Intron</th>
           <th>cDNA</th>
           <th>Amino acid</th>
+          <th>Litterature</th>
         </tr>
       </thead>
       <tbody>
@@ -993,6 +1008,13 @@
               <td>{{ transcript.intron or '' }}</td>
               <td>{{ (transcript.coding_sequence_name or '') }}</td>
               <td>{{ (transcript.protein_sequence_name or '')|url_decode }}</td>
+              <td>
+                {% if transcript.pubmed_link %}
+                  <a href="{{ transcript.pubmed_link }}" class="btn btn-default" target="_blank">Pubmed</a>
+                {% else %}
+                  <span class="text-muted">None</span>
+                {% endif %}
+              </td>
             </tr>
           {% endfor %}
         {% endfor %}
