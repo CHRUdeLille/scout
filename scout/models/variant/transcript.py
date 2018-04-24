@@ -46,5 +46,7 @@ transcript = dict(
     # If the transcript is relevant
     is_canonical = bool,
 
-)
+    # List of pubmed ids for current variant/transcript (Pubmed IDs for publications that cite existing variant.)
+    pubmed_ids = list
 
+)

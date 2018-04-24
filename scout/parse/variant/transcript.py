@@ -186,5 +186,8 @@ def parse_transcripts(raw_transcripts, allele=None):
                 elif variant_id.startswith('COSM'):
                     transcript['cosmic'].append(int(variant_id[4:]))
 
-        yield transcript
+        if entry.get('PUBMED'):
+            transcript['pubmed_ids']=list(entry.get('PUBMED').split('&'))
+            transcript['pubmed_ids']=[s + '[uid]' for s in transcript['pubmed_ids']]
 
+        yield transcript

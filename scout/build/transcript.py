@@ -67,6 +67,9 @@ def build_transcript(transcript):
     if transcript.get('protein_sequence_name'):
         transcript_obj['protein_sequence_name'] = transcript['protein_sequence_name']
 
+    if transcript.get('pubmed_ids'):
+        transcript_obj['pubmed_ids'] = transcript.get('pubmed_ids')
+
     transcript_obj['is_canonical'] = transcript.get('is_canonical', False)
 
     return transcript_obj
