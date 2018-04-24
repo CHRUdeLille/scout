@@ -222,6 +222,7 @@ def variant(store, institute_obj, case_obj, variant_id):
     variant_obj['swegen_link'] = swegen_link(variant_obj)
     variant_obj['beacon_link'] = beacon_link(variant_obj, genome_build)
     variant_obj['ucsc_link'] = ucsc_link(variant_obj, genome_build)
+    variant_obj['pubmed_link'] = pubmed_link(variant_obj)
     variant_obj['alamut_link'] = alamut_link(variant_obj)
     variant_obj['spidex_human'] = spidex_human(variant_obj)
     variant_obj['expected_inheritance'] = expected_inheritance(variant_obj)
@@ -362,6 +363,9 @@ def parse_transcript(gene_obj, tx_obj, build=None):
     tx_obj['smart_domain_link'] = ("http://smart.embl.de/smart/search.cgi?keywords={}"
                                    .format(tx_obj.get('smart_domain')))
 
+    tx_obj['pubmed_link'] = ("https://www.ncbi.nlm.nih.gov/pubmed/?term={}"
+                                   .format(' OR '.join(list(tx_obj.get('pubmed_ids')))))
+
     if tx_obj.get('refseq_ids'):
         gene_name = (gene_obj['common']['hgnc_symbol'] if gene_obj['common'] else
                      gene_obj['hgnc_id'])
@@ -492,6 +496,21 @@ def ucsc_link(variant_obj, build=None):
 
     return url_template.format(this=variant_obj)
 
+def pubmed_link(variant_obj):
+    """Compose link to PUBMED."""
+    pubmed_ids_list = set()
+    for gene_obj in variant_obj.get('genes', []):
+        for transcript_obj in gene_obj['transcripts']:
+            for pubmed in transcript_obj.get('pubmed_ids'):
+                 pubmed_ids_list.add(pubmed)
+
+    pubmed_ids_list = ' OR '.join(list(pubmed_ids_list))
+
+    if pubmed_ids_list:
+        url_template = ("https://www.ncbi.nlm.nih.gov/pubmed/?term={}")
+        return url_template.format(pubmed_ids_list)
+    else:
+        return None
 
 def alamut_link(variant_obj):
     url_template = ("http://localhost:10000/show?request={this[chromosome]}:"
